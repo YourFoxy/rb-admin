@@ -1,0 +1,40 @@
+[tool.poetry.dependencies]
+python = "^3.12"
+djangorestframework = "^3.15.1"
+python-dotenv = "^1.0.1"
+pytest = "^8.2.1"
+gunicorn = "^22.0.0"
+psycopg2-binary = "^2.9.9"
+whitenoise = "^6.6.0"
+drf-spectacular = "^0.27.2"
+django-cors-headers = "^4.3.1"
+pytest-django = "^4.8.0"
+model-bakery = "^1.18.0"
+pre-commit = "^3.7.1"
+openpyxl = "^3.1.4"
+drf-nested-routers = "^0.94.1"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.ruff]
+line-length = 120
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "E731",  # lambda usage is ok
+    "F821",  # undefined name
+]
+# Assume Python 3.11
+target-version = "py311"

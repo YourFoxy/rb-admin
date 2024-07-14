@@ -1,0 +1,9 @@
+django-cors-headers
+django-filter
+djangorestframework
+drf-spectacular
+gunicorn
+pillow
+psycopg2-binary
+python-dotenv
+whitenoise
