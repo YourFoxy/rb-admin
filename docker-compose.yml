@@ -5,7 +5,6 @@ services:
     ports:
       - "8079:8079"
     build: .
-    entrypoint: ["/start.sh"]
     volumes:
       - api-static:/app/staticfiles
       - api-media:/app/mediafiles

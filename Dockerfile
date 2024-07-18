@@ -9,7 +9,6 @@ WORKDIR /app
 COPY requirements-freeze.txt /app/requirements-freeze.txt
 RUN pip install --no-cache-dir -r requirements-freeze.txt
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
 COPY . .
+
+ENTRYPOINT python manage.py collectstatic --noinput && python manage.py migrate && exec gunicorn --bind 0.0.0.0:8079 -w 4 --threads 4 --worker-class="gthread" --keep-alive 30 --preload config.wsgi
