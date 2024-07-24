@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.books.models import Book, BookPhoto, Criterion, Provenention
+from apps.series.models import Series
 from apps.libraries.serializers import LibrarySerializer
 
 
@@ -25,7 +26,13 @@ class BookPhotoSerializer(serializers.ModelSerializer):
         fields = ("photo",)
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BaseSeriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Series
+        fields = ("id", "name", "description", "photo")
+
+
+class BaseBookSerializer(serializers.ModelSerializer):
     libraries = LibrarySerializer(many=True)
     criterion = CriterionSerializer()
     provenentions = ProvenentionSerializer(many=True)
@@ -34,6 +41,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = (
+            "id",
             "name",
             "description",
             "entered_at",
@@ -47,3 +55,10 @@ class BookSerializer(serializers.ModelSerializer):
             "language",
             "copies",
         )
+
+
+class BookSerializer(BaseBookSerializer):
+    series = BaseSeriesSerializer(read_only=True)
+
+    class Meta(BaseBookSerializer.Meta):
+        fields = BaseBookSerializer.Meta.fields + ("series",)

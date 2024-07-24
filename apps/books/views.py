@@ -1,4 +1,4 @@
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
 
@@ -16,7 +16,7 @@ class ProvenentionViewSet(ListModelMixin, GenericViewSet):
     serializer_class = ProvenentionSerializer
 
 
-class BookViewSet(ListModelMixin, GenericViewSet):
+class BookViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     pagination_class = PageNumberPagination
