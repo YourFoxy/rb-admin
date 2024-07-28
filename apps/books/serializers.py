@@ -14,12 +14,6 @@ class CriterionSerializer(serializers.ModelSerializer):
         )
 
 
-class ProvenentionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Provenention
-        fields = ("id", "name", "description", "photo")
-
-
 class BookPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookPhoto
@@ -35,7 +29,6 @@ class BaseSeriesSerializer(serializers.ModelSerializer):
 class BaseBookSerializer(serializers.ModelSerializer):
     libraries = LibrarySerializer(many=True)
     criterion = CriterionSerializer()
-    provenentions = ProvenentionSerializer(many=True)
     photos = BookPhotoSerializer(many=True)
 
     class Meta:
@@ -49,7 +42,6 @@ class BaseBookSerializer(serializers.ModelSerializer):
             "presenter",
             "libraries",
             "criterion",
-            "provenentions",
             "main_photo",
             "photos",
             "language",
@@ -57,8 +49,30 @@ class BaseBookSerializer(serializers.ModelSerializer):
         )
 
 
-class BookSerializer(BaseBookSerializer):
-    series = BaseSeriesSerializer(read_only=True)
+class BaseProvenentionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Provenention
+        fields = ("id", "name", "description", "photo")
+
+
+class ProvenentionSerializer(serializers.ModelSerializer):
+    books = BaseBookSerializer(many=True)
+
+    class Meta:
+        model = Provenention
+        fields = ("id", "name", "description", "photo", "books")
+
+
+class BookWithProvenentionSerializer(BaseBookSerializer):
+    provenentions = BaseProvenentionSerializer(many=True)
 
     class Meta(BaseBookSerializer.Meta):
-        fields = BaseBookSerializer.Meta.fields + ("series",)
+        model = Book
+        fields = BaseBookSerializer.Meta.fields + ("provenentions",)
+
+
+class BookSerializer(BookWithProvenentionSerializer):
+    series = BaseSeriesSerializer(read_only=True)
+
+    class Meta(BookWithProvenentionSerializer.Meta):
+        fields = BookWithProvenentionSerializer.Meta.fields + ("series",)
